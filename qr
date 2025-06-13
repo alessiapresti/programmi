@@ -1,0 +1,154 @@
+program QR
+
+implicit none
+INTEGER, PARAMETER:: nn=10
+real*8 a(nn,nn), r(nn,nn), d(nn), c(nn),sum,sigma,tau,e(nn,nn),f(nn,nn),q(nn,nn)
+integer i,j,k,n
+
+print*,'Inserisci ordine matrice'
+read(*,*) n
+do i=1,n
+do j=1,n
+a(i,j)=0
+r(i,j)=0
+end do
+end do
+
+print*,'Inserisci elementi matrice A'
+
+do i=1,n
+do j=1,n
+read(*,*) a(i,j)
+f(i,j)=a(i,j)
+end do
+end do
+
+do k=1,n-1
+! ||ak||^2 quadrato della norma 2
+sum=0
+do i=k,n
+sum=sum+a(i,k)**2
+end do
+			
+!SIGN (valore,segno) Una funzione che assegna il segno secondo argomento al valore
+!sigma=theta |a(k,k)|
+		
+sigma=sign(sqrt(sum),a(k,k))
+		
+!k-esima componente di v_k --> theta_k ( ||a_k||_2 + |a(k,k)|
+a(k,k)=a(k,k)+sigma
+		
+!denominatore di beta_k
+c(k)=sigma*a(k,k)
+		
+!-beta_k*v_k*v_k'
+d(k)=-sigma
+		
+!Prodotto beta_k*v_k*v_k'
+		
+do j=k+1,n
+sum=0
+! Prodotto v_k*v_k'
+do i=k,n
+sum=sum+a(i,k)*a(i,j)
+end do
+! beta_k*sum
+tau=sum/c(k)
+do i=k,n
+a(i,j)=a(i,j)-tau*a(i,k)
+end do
+end do
+
+end do
+d(n)=a(n,n)
+
+print*,'La matrice A :'
+do i=1,n
+print*,(a(i,j), j=1,n)
+end do
+
+do i=1,n
+do j=i+1,n
+r(i,j)=a(i,j)
+end do
+r(i,i)=d(i)
+end do
+
+print*,'La matrice R :'
+do i=1,n
+print*,(r(i,j), j=1,n)
+end do
+
+call inv(R,n,e)
+print*,'La matrice R^-1 :'
+do i=1,n
+print*,(e(i,j), j=1,n)
+end do
+
+do i=1,n
+do j=1,n
+q(i,j)=0
+end do
+end do
+do i=1,n
+do j=1,n
+do k=1,n
+q(i,j)= q(i,j)+f(i,k)*e(k,j)
+end do
+end do
+end do
+
+print*,'La matrice Q :'
+do i=1,n
+print*,(q(i,j), j=1,n)
+end do
+end
+
+subroutine inv(A,n,e)
+INTEGER, PARAMETER:: nn=10
+real*8 A(nn,nn),e(nn,nn), L(nn,nn),x(nn)
+integer n
+
+do i=1,n
+do j=1,n
+L(i,j)=0
+end do
+end do
+L(n,n)=1
+do i=1,n
+do j=1,n
+if (i.ne.j) then
+e(i,j)=0
+else
+e(i,j)=1
+end if
+end do
+end do
+do k=1,n-1
+L(k,k)=1
+do i=k+1,n
+L(i,k)=A(i,k)/A(k,k)
+do j=k,n
+A(i,j)=A(i,j)-L(i,k)*A(k,j)
+end do
+end do
+end do
+do m=1,n
+x(1)=e(1,m)/L(1,1)
+do i=2,n
+x(i)=e(i,m)
+do j=1,i-1
+x(i)=x(i)-L(i,j)*x(j)
+end do
+x(i)=x(i)/L(i,i)
+end do
+e(n,m)=x(n)/A(n,n)
+do i=n-1,1,-1
+e(i,m)=x(i)
+do j=n,i+1,-1
+e(i,m)=e(i,m)-A(i,j)*e(j,m)
+end do
+e(i,m)=e(i,m)/A(i,i)
+end do
+end do
+end
