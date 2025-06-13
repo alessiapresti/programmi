@@ -1,0 +1,49 @@
+program gaussjordan
+
+implicit none
+INTEGER, PARAMETER:: nn=10
+real A(nn,nn), b(nn),x(nn), L(nn,nn)
+integer n,i,j,k
+
+print*,'Inserisci ordine matrice'
+read(*,*) n
+print*,'Inserisci elementi matrice A'
+do i=1,n
+do j=1,n
+read(*,*) A(i,j)
+end do
+end do
+print*,'Inserisci termini noti'
+do i=1,n
+read(*,*) b(i)
+end do
+do i=1,n
+L(i,i)=1
+end do
+do k=1,n
+do i=1,n
+if(i.ne.k) then
+L(i,k)=A(i,k)/A(k,k)
+do j=k,n
+A(i,j)=A(i,j)-L(i,k)*A(k,j)
+end do
+b(i)=b(i)-L(i,k)*b(k)
+end if
+end do
+end do
+print*,'La matrice diagonale D è:'
+do i=1,n
+print*,(A(i,j), j=1,n)
+end do
+print*,'La matrice J è:'
+do i=1,n
+print*,(L(i,j), j=1,n)
+end do
+do i=1,n
+x(i)=b(i)/A(i,i)
+end do
+print*,'Le soluzioni sono:'
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+end
