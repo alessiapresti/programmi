@@ -1,0 +1,42 @@
+program nodi_cheb
+
+implicit none
+INTEGER, PARAMETER:: nn=200
+REAL,PARAMETER :: pi=3.141593
+real*8 a,b,xc(0:nn),x(0:nn),y(0:nn),xg(0:nn),yg(0:nn),h
+integer i,n,ng
+
+print*, 'Inserisci grado del polinomio'
+read(*,*) n
+ 
+a =-5
+b=5
+ng=100
+h=(b-a)/ng
+
+do i=0,ng
+xg(i)=a+i*h
+yg(i)=1/(xg(i)**2+1)
+end do
+
+print*,'I nodi di Chebychev e i valori y_i sono'
+do i=0,n
+x(i)=cos((2.-i+1)/(n+1)*(pi/2))
+xc(i)=(a+b)*0.5-(b-a)*x(i)*0.5
+y(i)=1./(xc(i)**2+1)
+write(*,*) xc(i),y(i)
+end do
+
+
+OPEN(90,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati.out')
+do i=0,n
+write(90,*)xc(i),y(i)
+end do
+close(90)
+
+OPEN(91,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_1.out')
+do i=0,ng
+write(91,*)xg(i),yg(i)
+end do
+close(91)
+end
