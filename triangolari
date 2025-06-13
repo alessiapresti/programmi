@@ -1,0 +1,66 @@
+program triangolareinf
+
+implicit none
+INTEGER, PARAMETER:: nn=10
+real L(nn,nn),b(nn), x(nn)
+integer n,i,j
+
+print*,'Inserisci ordine matrice'
+read(*,*) n
+print*,'Inserisci elementi matrice L'
+do i=1,n
+do j=1,i
+read(*,*) L(i,j)
+end do
+end do
+print*,'Inserisci termini noti'
+do i=1,n
+read(*,*) b(i)
+end do
+x(1)=b(1)/L(1,1)
+do i=2,n
+x(i)=b(i)
+do j=1,i-1
+x(i)=x(i)-L(i,j)*x(j)
+end do
+x(i)=x(i)/L(i,i)
+end do
+print*,'Le soluzioni sono:'
+do i=1,n
+print*,'x',i,'=',x(i)
+end do
+end
+
+program triangolaresup
+
+implicit none
+INTEGER, PARAMETER:: nn=10
+real U(nn,nn),b(nn), x(nn)
+integer n,i,j
+
+print*,'Inserisci ordine matrice'
+read(*,*) n
+print*,'Inserisci elementi matrice U'
+do i=1,n
+do j=i,n
+read(*,*) U(i,j)
+end do
+end do
+print*,'Inserisci termini noti'
+do i=1,n
+read(*,*) b(i)
+end do
+x(n)=b(n)/U(n,n)
+do i=n-1,1,-1
+x(i)=b(i)
+do j=i+1,n
+x(i)=x(i)-U(i,j)*x(j)
+end do
+x(i)=x(i)/U(i,i)
+end do
+print*,'Le soluzioni sono:'
+do i=1,n
+print*,'x',i,'=',x(i)
+end do
+end
+
