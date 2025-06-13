@@ -1,0 +1,34 @@
+
+%funzione da integrare y(x)=sin(x)
+
+
+a=0;
+b=pi;
+n=5;       %nodi
+m=n-1;     %intervalli
+h=(b-a)/m;
+xk=zeros(1,m);
+yk=zeros(1,m);
+x=a:h:b;
+INT=2;  %valore esatto integrale 
+somma=0;
+
+
+for i=1:m
+    xk(i)=(x(i)+x(i+1))/2;
+end 
+
+for i=1:m
+    yk(i)=sin(xk(i));
+end 
+
+for i=1:m
+   somma=somma+yk(i);
+end 
+int=h*somma;
+disp(int)
+    
+
+e=abs(INT-int);
+disp(e)
+
