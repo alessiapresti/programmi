@@ -1,0 +1,11 @@
+fname= ('jacobi.txt');
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+norm=data(1,:);
+errore=data(2,:);
+
+c=length(norm);
+x=1:1:c;
+
+semilogy(x,norm,'-bs',x,errore,'-rs'),xlabel('x'),ylabel('y'),legend('errore k-esimo','errore assoluto')
