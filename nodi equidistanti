@@ -1,0 +1,27 @@
+program nodi_e
+
+implicit none
+INTEGER, PARAMETER:: nn=200
+real*8 a,b,x(0:nn),y(0:nn)
+integer i,n
+
+print*, 'Inserisci grado del polinomio'
+read(*,*) n
+
+a =0
+b=2*pi
+
+print*,'I nodi equidistanti e i valori y_i sono'
+do i=0,n
+x(i)=a+i*(b-a)/n
+y(i)=sin(x(i))
+write(*,*) x(i),y(i)
+end do
+
+OPEN(92,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati2.out')
+do i=0,n
+write(92,*)x(i),y(i)
+end do
+close(92)
+
+end
