@@ -1,0 +1,32 @@
+clc
+clear all
+
+a=0;
+b=pi;
+
+N=input('Inserisci numero intervalli ');
+h=(b-a)/N;
+
+for i=1:N+1
+    x(i)=a+(i-1)*h; %Nodi 
+end
+
+s=0;
+for i=1:N %Punto medio
+    c=(x(i+1)+x(i))/2;
+    s=s+h*sin(c);
+end
+s
+
+s=0;
+for i=1:N %trapezi
+    s=s+h/2*(sin(x(i))+sin(x(i+1)));
+end
+s
+
+s=0;
+for i=1:2:N-2 %Cavalieri Simpson
+    s=s+h/3*(sin(x(i))+4*sin(x(i+1))+sin(x(i+2)));
+end
+s=s+h/6*(sin(x(N-2))+4*sin(x(N-1))+sin(x(N)));
+s
