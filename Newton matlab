@@ -1,0 +1,89 @@
+%costruzione polinomio interpolatore di newton, con nodi equidistanti e di chebychev;come funzione da
+%interpolare utilizzo y(x)=(exp(x))*cos(4*x)
+
+n=5;    % nodi (signifa che il grado del polinomio interpolante è 4)
+a=0;
+b=3;
+x=a:0.1:b;
+xe=a:(b-a)/(n-1):b;
+xc=zeros(1,n);
+yc=zeros(1,n);
+ye=zeros(1,n);
+a=zeros(1,n);
+c=zeros(1,n);
+s=length(x);
+yne=zeros(1,s);
+ync=zeros(1,s);
+y=zeros(1,s);
+err=zeros(1,s);
+errc=zeros(1,s);
+
+
+
+for i=1:n
+    ye(i)=(exp(xe(i)))*cos(4*xe(i));
+end 
+
+for i=1:s
+    y(i)=(exp(x(i)))*cos(4*x(i));
+end 
+
+a(1)=ye(1);
+k=2;
+while(k<=n)
+    proden=1;
+    j=1;
+    while(j<=k-1)
+        proden=proden*(xe(k)-xe(j));
+        j=j+1;
+    end 
+    som=a(1);
+    i=2;
+    while(i<=k-1)
+        pronum=1;
+        l=1;
+        while(l<=i-1)
+            pronum=pronum*(xe(k)-xe(l));
+            l=l+1;
+        end
+        som=som+a(i)*pronum;
+        i=i+1;
+    end 
+    a(k)=(ye(k)-som)/proden;
+    k=k+1;
+end 
+
+for h=1:s
+    yne(h)=0;
+    k=1;
+    while(k<=n)
+        pro=1;
+        i=1;
+        while(i<=k-1)
+            pro=pro*(x(h)-xe(i));
+            i=i+1;
+        end
+        yne(h)=yne(h)+a(k)*pro;
+        k=k+1;
+    end
+end 
+
+disp(a);
+
+
+
+
+for i=1:s
+    err(i)=abs(y(i)-yne(i));
+end
+
+
+
+subplot(2,1,1)
+
+plot(x,y,'bs',x,yne,'-g',x,ync,'-r'),xlabel('x'),ylabel('y'),legend('funzione','newton l','newton c')
+
+subplot(2,1,2)
+
+plot(x,err,'gs',x,errc,'rs'),xlabel('x'),ylabel('errore'),legend('errore l','errore c')
+
