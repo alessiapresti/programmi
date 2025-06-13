@@ -1,0 +1,31 @@
+clear
+clf
+
+fname = ['dati_1.out'];
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+x  = data(1,:);
+y = data(2,:);
+
+figure(1)
+plot(x,y,'-b','Linewidth',2);
+xlabel('x');
+ylabel('f(x_n)');
+hold on
+fname = ['dati_nwc.out'];
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+x  = data(1,:);
+y = data(2,:);
+plot(x,y,'-r','Linewidth',2);
+hold on
+fname = ['dati_nwe.out'];
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+x  = data(1,:);
+y = data(2,:);
+plot(x,y,'-g','Linewidth',2);
+grid
