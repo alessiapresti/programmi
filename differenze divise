@@ -1,0 +1,31 @@
+program diffdiv
+implicit none
+INTEGER, PARAMETER:: nn=20
+integer n,i,j
+real*8 x(0:nn),f(0:nn)
+
+print*, 'Inserisci numero nodi'
+read(*,*) n
+ 
+print*, 'Inserisci x nodi'
+do i=0,n
+read(*,*) x(i)
+end do 
+
+print*, 'Inserisci y nodi'
+do i=0,n
+read(*,*) f(i)
+end do 
+
+do i=0,n
+do j=i+1,n
+f(j)=(f(j)-f(i))/(x(j)-x(i))
+end do
+end do
+
+print*, 'Le differenze divise sono:'
+do i=0,n
+write(*,*) f(i)
+end do 
+
+end 
