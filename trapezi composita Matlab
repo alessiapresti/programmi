@@ -1,0 +1,25 @@
+%formula trapezi composita. funzione integranda y(x)=sin(x)
+
+a=0;
+b=pi;
+n=17;         %nodi
+m=n-1;       %intervalli
+h=(b-a)/m;
+xk=a:h:b;
+yk=zeros(1,n);
+INT=2;          %valore integrale esatto
+somma=0;
+
+
+for i=1:n
+    yk(i)=sin(xk(i));
+end
+
+for i=1:m
+    somma=somma+(yk(i)+yk(i+1));
+end 
+int=(h/2)*somma;
+int
+
+e=abs(INT-int);
+e
