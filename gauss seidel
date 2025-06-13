@@ -1,0 +1,56 @@
+program Gausseidel
+
+implicit none
+INTEGER, PARAMETER:: nn=10
+REAL, PARAMETER:: tol=0.00001
+real*8 a(nn,nn), x(nn), x1(nn), b(nn),sum,norm
+integer i,j,k,n
+print*,'Inserisci ordine matrice'
+
+read(*,*) n
+
+print*,'Inserisci elementi matrice A'
+
+do i=1,n
+do j=1,n
+read(*,*) a(i,j)
+end do
+end do
+
+print*,'Inserisci termini noti '
+
+do i=1,n
+read(*,*) b(i)
+x(i)=0
+end do
+norm=1
+k=0
+do while ((norm>tol).AND.(k<100))
+k=k+1
+do i=1,n
+sum=0
+x1(i)=x(i)
+do j=1,n
+if(i.NE.j) then
+sum=sum+a(i,j)*x(j)
+end if
+end do
+x(i)=(b(i)-sum)/a(i,i)
+end do
+sum=0
+do i=1,n
+sum=sum+(x1(i)-x(i))*(x1(i)-x(i))
+end do
+norm=sqrt(sum)
+end do
+
+
+print*,'Le solizioni sono :'
+
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+
+
+print*,'Il numero di iterate:',k
+end
