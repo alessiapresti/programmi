@@ -1,0 +1,103 @@
+clc
+clear all
+
+fname = ['dati_2.out'];
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+x  = data(1,:);
+y = data(2,:);
+n=length(x)
+
+for i=1:n-1
+    h(i)=x(i+1)-x(i);
+end
+
+for i=1:n-1
+    c1(i)=(y(i+1)-y(i))/h(i);
+end
+
+xg=-5:0.1:5;
+k=1;
+for i=1:n-1
+    while (xg(k)>=x(i)) && (xg(k)<=x(i+1)) &&(k<101)
+        s(k)=y(i)+c1(i)*(xg(k)-x(i));
+        k=k+1;
+    end
+end
+s(k)=y(i)+c1(i)*(xg(k)-x(i));
+
+plot(xg,s,'b-')
+for k=1:101
+    yg(k)=1/(xg(k)^2+1);
+end
+e=yg-s;
+hold on
+plot(xg,yg,'r-')
+hold on
+plot(xg,e,'g-')
+
+
+clc
+clear all
+
+fname = ['dati_2.out'];
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+x  = data(1,:);
+y = data(2,:);
+n=length(x)
+
+for i=1:n-1
+    h(i)=x(i+1)-x(i);
+end
+
+for i=1:n-2
+   b(i)=6*(((y(i+2)-y(i+1))/h(i+1) - (y(i+1)-y(i))/h(i)));
+end
+
+for i=1:n-2
+    a(i,i)=2*(h(i)+h(i+1));
+end
+
+for i=1:n-3
+    a(i,i+1)=h(i);
+    a(i+1,i)=h(i);
+end
+
+z=a\b';
+s2=zeros(1,n);
+for i=2:n-1
+    s2(i)=z(i-1);
+end
+
+for i=1:n-1
+   s3(i)=(s2(i+1)-s2(i))/h(i);
+   s1(i)=(y(i+1)-y(i))/h(i)-1/2*s2(i)*h(i)-1/6*(s2(i+1)-s2(i))*h(i);
+end
+for i=1:n-1
+    c1(i)=s1(i);
+    c2(i)=1/2*s2(i);
+    c3(i)=1/6*s3(i);
+end
+
+xg=-5:0.1:5;
+k=1;
+for i=1:n-1
+    while (xg(k)>=x(i)) && (xg(k)<=x(i+1)) &&(k<101)
+        s(k)=y(i)+c1(i)*(xg(k)-x(i))+c2(i)*((xg(k)-x(i))^2)+c3(i)*((xg(k)-x(i))^3);
+        k=k+1;
+    end
+end
+s(k)=y(i)+c1(i)*(xg(k)-x(i))+c2(i)*((xg(k)-x(i))^2)+c3(i)*((xg(k)-x(i))^3);
+
+plot(xg,s,'b-')
+for k=1:101
+    yg(k)=1/(xg(k)^2+1);
+end
+e=yg-s;
+hold on
+plot(xg,yg,'r-')
+hold on
+plot(xg,e,'g-')
