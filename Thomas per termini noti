@@ -1,0 +1,67 @@
+program Thomas_syst
+
+implicit none
+INTEGER, PARAMETER:: nn=10
+real a(nn),b(nn),c(nn),L(nn,nn),U(nn,nn),x(nn),d(nn)
+integer n,i,j
+
+print*,'Inserisci dimensione matrice'
+read(*,*) n
+print*,'Inserisci elementi della diagonale'
+do i=1,n
+read(*,*) a(i)
+end do
+print*,'Inserisci elementi della sotto diagonale'
+do i=1,n-1
+read(*,*)b(i)
+end do
+print*,'Inserisci elementi della sovra diagonale'
+do i=1,n-1
+read(*,*)c(i)
+end do
+print*,'Inserisci termini noti'
+do i=1,n
+read(*,*)d(i)
+end do
+do i=1,n
+do j=1,n
+L(i,j)=0
+U(i,j)=0
+end do
+end do
+do i=1,n-1
+b(i)=b(i)/a(i)
+a(i+1)=a(i+1)-b(i)*c(i)
+d(i+1)=d(i+1)-b(i)*d(i)
+end do
+L(n,n)=1
+U(n,n)=a(n)
+do i=1,n-1
+L(i,i)=1
+U(i,i)=a(i)
+L(i+1,i)=b(i)
+U(i,i+1)=c(i)
+print*,d(i)
+end do
+print*,d(n)
+call sys_up(U,n,d,x)
+print*,'Le soluzioni sono'
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+end
+
+subroutine sys_up(U,n,d,x)
+INTEGER, PARAMETER:: nn=10
+real U(nn,nn),d(nn), x(nn)
+integer n
+x(n)=d(n)/U(n,n)
+do i=n-1,1,-1
+x(i)=d(i)
+do j=i+1,n
+x(i)=x(i)-U(i,j)*x(j)
+end do
+x(i)=x(i)/U(i,i)
+end do
+print*,(x(i),i=1,n)
+end
