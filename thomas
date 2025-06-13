@@ -1,0 +1,48 @@
+program Thomas
+
+implicit none
+INTEGER, PARAMETER:: nn=10
+real a(nn),b(nn),c(nn),L(nn,nn),U(nn,nn)
+integer n,i,j
+
+print*,'Inserisci dimensione matrice'
+read(*,*) n
+print*,'Inserisci elementi della diagonale'
+do i=1,n
+read(*,*) a(i)
+end do
+print*,'Inserisci elementi della sotto diagonale'
+do i=1,n-1
+read(*,*)b(i)
+end do
+print*,'Inserisci elementi della sovra diagonale'
+do i=1,n-1
+read(*,*)c(i)
+end do
+do i=1,n
+do j=1,n
+L(i,j)=0
+U(i,j)=0
+end do
+end do
+do i=1,n-1
+b(i)=b(i)/a(i)
+a(i+1)=a(i+1)-b(i)*c(i)
+end do
+L(n,n)=1
+U(n,n)=a(n)
+do i=1,n-1
+L(i,i)=1
+U(i,i)=a(i)
+L(i+1,i)=b(i)
+U(i,i+1)=c(i)
+end do
+print*,'La matrice U è:'
+do i=1,n
+print*,(U(i,j), j=1,n)
+end do
+print*,'La matrice L è:'
+do i=1,n
+print*,(L(i,j), j=1,n)
+end do
+end
