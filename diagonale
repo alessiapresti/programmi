@@ -1,0 +1,24 @@
+program dia
+INTEGER, PARAMETER:: nn=10
+real A(nn,nn),b(nn)
+integer n
+
+print*, 'inserisci ordine matrice'
+read (*,*) n
+print*, 'inserisci elementi matrice'
+do i=1,n
+read (*,*) A(i,i)
+end do
+print*, 'inserisci termini noti'
+do i=1,n
+read (*,*) b(i)
+end do
+
+do i=1,n
+b(i)=b(i)/A(i,i)
+end do
+print*, 'soluzioni'
+do i=1,n
+print*,'x',i,'=',b(i)
+end do
+end
