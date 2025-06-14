@@ -1,0 +1,55 @@
+program polinomio_Lagrange_non_equidistanti
+
+   implicit none
+   
+   integer, parameter :: nn=200
+   real, parameter :: pi=3.141593
+   real*8 a,b,x(0:nn),xg(0:nn),y(0:nn),yg(0:nn),h,pn(0:nn),L(0:nn)
+   integer i,n,ng,ig,j
+   
+   print*,'Polinomio di Lagrange con Nodi Equidistanti'
+   print*,'Inserisci il grado del polinomio:'
+   read*,n
+   
+   open(90,status='unknown',access='sequential',file='dati_Lagrange5.out')
+   
+   a=-5
+   b=5
+   ng=100
+   h=(b-a)/ng
+   
+   do i=0,ng
+      xg(i)=a+i*h
+      yg(i)=1./(1+xg(i)**2)
+      !write(90,*) xg(i),yg(i)
+   end do
+   
+   h=(b-a)/n
+   print*,'I nodi non equidistanti sono:'
+   do i=0,n
+      print*,'x(',i,')='
+      read*,x(i)
+      y(i)=1./(1+x(i)**2)
+      print*,x(i),y(i)
+   end do
+   
+   do ig=0,ng
+      pn(ig)=0
+      do i=0,n
+         L(i)=1.
+         do j=0,n
+            if (i.ne.j) then
+               L(i)=L(i)*(xg(ig)-x(j))/(x(i)-x(j))
+            end if
+         end do
+         pn(ig)=pn(ig)+y(i)*L(i)
+      end do
+   end do
+   
+   do i=1,ng
+      write(90,*) xg(i),yg(i),pn(i)
+   end do
+   
+   close(90)
+
+end program polinomio_Lagrange_non_equidistanti
