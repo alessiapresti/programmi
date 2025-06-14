@@ -1,0 +1,28 @@
+clear all
+clf
+
+fname='dati_quadratura.txt';
+fid=fopen(fname);
+data_3=fscanf(fid,'%g %g %g',[3,5]);
+n=data_3(1,:);
+int=data_3(2,:);
+e=data_3(3,:);
+
+fname='dati_rapporti_quadratura.txt';
+fid=fopen(fname);
+data_6=fscanf(fid,'%g %g',[2,4]);
+i=data_6(1,:);
+rapp_e=data_6(2,:);
+
+figure(1)
+semilogy(n,e,'k')
+grid
+title('errore quadratura Trapezi')
+legend('errore')
+
+figure(2)
+plot(i,rapp_e,'k')
+grid
+title('rapporto errore')
+legend('rapporto')
+
