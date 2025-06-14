@@ -1,0 +1,65 @@
+clear all
+clf
+
+fname='dati_1.out';
+fid=fopen(fname);
+data_3=fscanf(fid,'%g %g ',[4,91]);
+xg=data_3(1,:);
+yg=data_3(2,:);
+
+
+fname='dati_nwe.out';
+fid=fopen(fname);
+data_C_3=fscanf(fid,'%g %g ',[4,91]);
+xe=data_3(1,:);
+ye=data_3(1,:);
+
+fname='dati_nwc.out';
+fid=fopen(fname);
+data_C_3=fscanf(fid,'%g %g',[4,91]);
+xc=data_3(1,:);
+yc=data_3(2,:);
+
+figure(1)
+plot(xg,yg,'k',xe,ye,'r',xc,yc,'b')
+grid
+title('int. n=3')
+legend('funzione','pol Newton: nodi equidistanti', 'pol Newton: nodi di Chebyshev')
+
+
+
+clear all
+clf
+
+fname='dati_1.out';
+fid=fopen(fname);
+data_3=fscanf(fid,'%g %g ',[4,91]);
+xg=data_3(1,:);
+yg=data_3(2,:);
+
+
+fname='dati_nwe.out';
+fid=fopen(fname);
+data_3=fscanf(fid,'%g %g ',[4,91]);
+xe=data_3(1,:);
+ye=data_3(2,:);
+
+fname='dati_nwc.out';
+fid=fopen(fname);
+data_3=fscanf(fid,'%g %g',[4,91]);
+xc=data_3(1,:);
+yc=data_3(2,:);
+
+ee=abs(yg-ye);
+
+ec=abs(yg-yc);
+
+
+
+
+figure(1)
+plot(xg,yg,'k',xe,ye,'r',xc,yc,'b',xe,ee,'v',xc,ec,'d')
+grid
+title('int. n=3')
+legend('funzione','pol Newton: nodi equidistanti', 'pol Newton: nodi di Chebyshev')
+
