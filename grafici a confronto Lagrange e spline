@@ -1,0 +1,135 @@
+clf
+
+fname='dati_Lagrange_equi_5_es_2_01_07_22.out';
+fid=fopen(fname);
+data_l_5=fscanf(fid,'%g %g %g %g',[4,316]);
+x=data_l_5(1,:);
+y=data_l_5(2,:);
+pn_5=data_l_5(3,:);
+err_l_5=data_l_5(4,:);
+
+fname='dati_Lagrange_equi_7_es_2_01_07_22.out';
+fid=fopen(fname);
+data_l_7=fscanf(fid,'%g %g %g %g',[4,316]);
+pn_7=data_l_7(3,:);
+err_l_7=data_l_7(4,:);
+
+fname='dati_Lagrange_equi_9_es_2_01_07_22.out';
+fid=fopen(fname);
+data_l_9=fscanf(fid,'%g %g %g %g',[4,316]);
+pn_9=data_l_9(3,:);
+err_l_9=data_l_9(4,:);
+
+fname='dati_Lagrange_Chebyshev_5_es_2_01_07_22.out';
+fid=fopen(fname);
+data_C_5=fscanf(fid,'%g %g %g %g',[4,316]);
+pn_C_5=data_C_5(3,:);
+err_C_5=data_C_5(4,:);
+
+fname='dati_Lagrange_Chebyshev_7_es_2_01_07_22.out';
+fid=fopen(fname);
+data_C_7=fscanf(fid,'%g %g %g %g',[4,316]);
+pn_C_7=data_C_7(3,:);
+err_C_7=data_C_7(4,:);
+
+fname='dati_Lagrange_Chebyshev_9_es_2_01_07_22.out';
+fid=fopen(fname);
+data_C_9=fscanf(fid,'%g %g %g %g',[4,316]);
+pn_C_9=data_C_9(3,:);
+err_C_9=data_C_9(4,:);
+
+
+
+a   = 0;
+b   = 3;
+Ng  = 151;
+x_g = linspace(a,b,Ng);
+
+
+
+for k=linspace(5,9,3)
+
+    clear c0 c1 A c c2 c3 h x_n y_n z z1 b1 n
+    
+    n=k;
+    n = n+1;
+    x_n = linspace(a,b,n);
+    y_n = exp(x_n).*cos(4.*x_n);
+    
+    
+    for i=1:n-1
+        h(i) = x_n(i+1)-x_n(i);
+    end
+    
+    A = zeros(n-2,n-2);
+    b1 = zeros(n-2,1);
+    for i=1:n-2
+        A(i,i) = 2*(h(i)+h(i+1));
+        b1(i)   = 6*((y_n(i+2)-y_n(i+1))/h(i+1) - (y_n(i+1)-y_n(i))/h(i));    
+    end
+    
+    for i=1:n-3
+        A(i,i+1)=h(i+1);
+    end
+    for i=2:n-2
+        A(i,i-1)=h(i);
+    end
+    
+    z1 = A\b1;
+    z = zeros(n,1);
+    z(2:n-1) = z1;
+    
+    for i=1:n-1
+        c3(i) = (z(i+1)-z(i))/(6*h(i));
+        c2(i) = z(i)/2;
+        c1(i) = (y_n(i+1)-y_n(i))/h(i) - h(i)*z(i+1)/6 - h(i)*z(i)/3;
+        c0(i) = y_n(i);
+    end
+    
+    c(:,4) = c0;
+    c(:,3) = c1;
+    c(:,2) = c2;
+    c(:,1) = c3;
+    
+    for i=1:Ng
+        yy(k,i) = fun_spline_cubiche(c0,c1,c2,c3,x_g(i),x_n,n);
+        e(k,i) = abs(y(i)-yy(k,i));
+    end
+
+end 
+
+figure(1)
+plot(x,y,'k',x,pn_5,'b',x,pn_C_5,'r',x,yy(5,:),'m')
+legend('funzione','polinomio di Lagrange: nodi equidistanti','polinomio di Lagrange: nodi di Chebyshev','spline cubica')
+title('interpolazione n=5')
+grid
+
+figure(2)
+plot(x,y,'k',x,pn_7,'b',x,pn_C_7,'r',x,yy(7,:),'m')
+legend('funzione','polinomio di Lagrange: nodi equidistanti','polinomio di Lagrange: nodi di Chebyshev','spline cubica')
+title('interpolazione n=7')
+grid
+
+figure(3)
+plot(x,y,'k',x,pn_9,'b',x,pn_C_9,'r',x,yy(9,:),'m')
+legend('funzione','polinomio di Lagrange: nodi equidistanti','polinomio di Lagrange: nodi di Chebyshev','spline cubica')
+title('interpolazione n=9')
+grid
+
+figure(4)
+plot(x,err_l_5,'b',x,err_C_5,'r',x,e(5,:),'m')
+legend('errore polinomio di Lagrange: nodi equidistanti','errore polinomio di Lagrange: nodi di Chebyshev','errore spline cubica')
+title('errore n=5')
+grid
+
+figure(5)
+plot(x,err_l_7,'b',x,err_C_7,'r',x,e(7,:),'m')
+legend('errore polinomio di Lagrange: nodi equidistanti','errore polinomio di Lagrange: nodi di Chebyshev','errore spline cubica')
+title('errore n=7')
+grid
+
+figure(6)
+plot(x,err_l_9,'b',x,err_C_9,'r',x,e(9,:),'m')
+legend('errore polinomio di Lagrange: nodi equidistanti','errore polinomio di Lagrange: nodi di Chebyshev','errore spline cubica')
+title('errore n=9')
+grid
