@@ -1,0 +1,41 @@
+program formula_cavalieri_simpson
+
+   implicit none
+   
+   real, dimension(100) :: x,y,x_m,y_m
+   real :: a,b,h
+   integer :: n
+   integer :: i
+   real :: integral
+   
+   print*,'il primo estremo di integrazione è:'
+   read*,a
+   
+   print*,'il secondo estremo di integrazione è:'
+   read*,b
+   
+   print*,'scrivi quanti nodi equidistanti ci sono:'
+   read*,n
+   
+   h=(b-a)/n
+   
+   do i=0,n
+      x(i)=a+i*h
+      y(i)=(x(i)^2)/exp^(x(i))
+   end do
+   
+   do i=0,n-1
+      x_m(i)=(x(i+1)+x(i))/2
+      y_m(i)=x_m(i)^2)/exp^(x_m(i))
+   end do
+   
+   integral=0
+   do i=0,n-1
+      integral=integral+h*(y(i)+4*y_m(i)+y(i+1))/6
+   end do
+   
+   print*,integral
+	  
+
+
+end program formula_cavalieri_simpson
