@@ -1,0 +1,34 @@
+!siano x,y,z verificare che (xyt)z=x(ytz) calcolare costo computazionale
+          Program Associativa
+          real*8 X(3), Y(3), somma1, somma2, z
+          somma1=0
+          somma2=0
+          z=2
+          do i=1,3
+          print*, 'X(',i,')='
+          read(*,*) X(i)
+          end do
+          
+          do i=1,3
+          print*, 'Y(',i,')='
+          read(*,*) Y(i)
+          end do
+          
+          do i=1,3
+          somma1=somma1+X(i)*Y(i)
+          end do
+
+          somma1=somma1*z
+          
+          
+          do i=1,3
+          Y(i)=Y(i)*z
+          end do
+          do i=1,3
+          somma2=somma2+X(i)*Y(i)
+          end do
+          
+
+          print*, somma1
+          print*, somma2
+          end program
