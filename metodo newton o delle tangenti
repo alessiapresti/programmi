@@ -1,0 +1,46 @@
+       PROGRAM NEWTON
+!      METODO DI NEWTON O DELLE TANGENTI
+       IMPLICIT NONE
+       REAL XI, EPS, XX, YY, DYDX,YVAL
+       INTEGER ITER, I, M
+       LOGICAL TEST1, TEST2
+       PARAMETER (ITER = 15)
+!     PARAMETER (EPS = 0.00001)
+       PRINT*, 'INSERISCI MOLTEPLICITA M'
+       READ*, M
+       PRINT*, 'INSERISCI IL VALORE DI X_O'
+       READ*, XI
+       PRINT*, 'INSERISCI IL VALORE DELLA TOLLERANZA'
+       READ*, EPS
+       CALL YVAL (XI,YY)
+       PRINT*, 'ITER X_K F(X_K)'
+       DO I = 1, ITER
+        CALL DYDXVAL(XI,DYDX)
+        XX = XI - M*YY/DYDX
+        CALL YVAL(XX,YY)
+        TEST1 = ABS(YY).LE.EPS
+        TEST2 = ABS(XX-XI).LE.EPS
+        IF (TEST1.OR.TEST2) THEN
+         WRITE(*, 101) I, XX, YY
+         PRINT*, ' '
+         PRINT*, 'ZERO = ', XX, 'F(ZERO) = ', YY
+         STOP
+        ELSE
+         WRITE(*,101) I, XX, YY
+         XI = XX
+        ENDIF
+       END DO
+       PRINT*, 'NO CONVERGENZA IN ',ITER,' ITERAZIONI!'
+101    FORMAT (I2,3X,F12.6,6X,F12.6)
+       END
+       
+       
+       SUBROUTINE DYDXVAL(U,DF)
+       REAL U,DF,E
+       E = .9
+       DF = 1.-E*COS(U)
+       RETURN
+       END
+
+
+
