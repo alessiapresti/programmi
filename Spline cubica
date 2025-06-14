@@ -1,0 +1,58 @@
+clear 
+clf
+
+a   = 0;
+b   = 10;
+Ng  = 316;
+x_g = linspace(a,b,Ng);
+
+n = 5; %sottointervalli
+n = n+1;
+x = linspace(a,b,n);
+y = exp(x).*cos(4.*x);
+
+
+for i=1:n-1
+    h(i) = x(i+1)-x(i);
+end
+
+A = zeros(n-2,n-2);
+b = zeros(n-2,1);
+for i=1:n-2
+    A(i,i) = 2*(h(i)+h(i+1));
+    b(i)   = 6*((y(i+2)-y(i+1))/h(i+1) - (y(i+1)-y(i))/h(i));    
+end
+
+for i=1:n-3
+    A(i,i+1)=h(i+1);
+end
+for i=2:n-2
+    A(i,i-1)=h(i);
+end
+
+z1 = A\b;
+z = zeros(n,1);
+z(2:n-1) = z1;
+
+for i=1:n-1
+    c3(i) = (z(i+1)-z(i))/(6*h(i));
+    c2(i) = z(i)/2;
+    c1(i) = (y(i+1)-y(i))/h(i) - h(i)*z(i+1)/6 - h(i)*z(i)/3;
+    c0(i) = y(i);
+end
+
+c(:,4) = c0;
+c(:,3) = c1;
+c(:,2) = c2;
+c(:,1) = c3;
+
+for i=1:Ng
+    yy(i) = fun_spline_cubiche(c0,c1,c2,c3,x_g(i),x,n);
+end
+
+
+figure(1)
+plot(x,y,'og',x_g,yy,'-b','Linewidth',2);
+legend('Nodi','s_3(x)')
+title('Spline cubiche')
+grid
