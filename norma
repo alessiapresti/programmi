@@ -1,0 +1,28 @@
+        program Norma
+        
+        integer n
+        real x(10), norma2x, sommax
+        norma2x=0
+        print*, 'inserisci dimensione del vettore'
+        read*, n
+        
+        do i=1, n
+        print*, 'inserisci componente vettore'
+        read*, x(i)
+        end do
+        
+        do i=1, n
+        sommax=sommax+x(i)**2
+        end do
+        norma2x=sqrt(sommax)
+        print*, 'la norma2 del vettore x = ', norma2x
+      
+        end program
+        
+        
+        
+     
+        
+        
+    
+        
