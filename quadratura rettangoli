@@ -1,0 +1,34 @@
+program formula_del_rettangolo
+
+   implicit none
+   
+   real, dimension(100) :: x,y
+   real :: a,b,h
+   integer :: n
+   integer :: i
+   real :: integral
+   
+   print*,'il primo estremo di integrazione è:'
+   read*,a
+   
+   print*,'il secondo estremo di integrazione è:'
+   read*,b
+   
+   print*,'scrivi quanti nodi equidistanti ci sono:'
+   read*,n
+   
+   h=(b-a)/n
+   
+   do i=0,n
+      x(i)=a+i*h
+      y(i)=sin(x(i))
+   end do
+   
+   integral=0
+   do i=0,n-1
+      integral=integral+h*y(i)
+   end do
+   
+   print*,integral
+
+end program formula_del_rettangolo
