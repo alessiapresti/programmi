@@ -1,0 +1,32 @@
+program e__x
+
+   implicit none
+   
+   real :: x,f_x
+   integer :: n,fatt
+   integer :: i
+   real :: somma,er
+   
+   print*,'e^-:'
+   read*,x
+   
+   print*,'scrivi quanti termini dello sviluppo in serie di Taylor vuoi usare:'
+   read*,n
+   
+   somma=0
+   fatt=1
+   do i=1,n
+      somma=somma+(x**(i-1))/fatt
+      fatt=fatt*i
+   end do
+   somma=1/somma
+   
+   print*,somma
+   
+   f_x=exp(-1*x)
+   print*,f_x
+   
+   er=abs(f_x-somma)
+   print*,er
+   
+end program e__x
