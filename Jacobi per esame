@@ -1,0 +1,193 @@
+program permuta_predominanza
+  implicit none
+  integer, parameter :: n = 3
+  real :: A(n,n), B(n), temp(n), tempB
+  real :: M(n,n), D(n,n), R(n,n), C(n,n), XN(n)
+  integer :: i, j, k, maxriga, somma, ITER, ITERMAX, NUM, ERR 
+
+REAL, PARAMETER:: tol=0.00001
+real*8 x(n), x1(n),sum,norm
+ITERMAX=100 
+
+    A(1,:)=(/1.0, 2.0, 4.0 /)
+    A(2,:)=(/3.0, 0.0, 2.0 /)
+    A(3,:)=(/1.0, 4.0, 2.0 /)
+  B = [1.0, 5.0, 2.0]
+ 
+  print*, 'Matrice A' 
+  do i = 1, n
+     print*, A(i,:)
+  end do
+   
+  print*, 'Vettore B' 
+  do i = 1, n
+     print*, B(i)
+  end do
+
+
+
+  ! Scambio righe per tentare predominanza
+  do i = 1, n
+     do j = i, n
+        somma = 0
+        do k = 1, n
+           if (k /= i) somma = somma + abs(A(j,k))
+        end do
+        if (abs(A(j,i)) >= somma) then
+           temp = A(i,:)
+           A(i,:) = A(j,:)
+           A(j,:) = temp
+
+           tempB = B(i)
+           B(i) = B(j)
+           B(j) = tempB
+           exit
+        end if
+     end do
+  end do
+
+  ! Verifica predominanza
+  do i = 1, n
+     somma = 0
+     do j = 1, n
+        if (i.ne.j) then 
+            somma = somma + abs(A(i,j))  
+        end if 
+     end do
+   end do 
+      
+  print*, 'Matrice a predominanza diagonale:'
+  do i = 1, n
+     print*, A(i,:)
+  end do
+  
+!Metodo di Jacobi: XN = D^¹*(B - (R+C)*X)
+! Costruzione D, R, C
+DO I=1,N
+    DO J=1,N
+        IF (I.EQ.J) THEN
+            D(I,J)=A(I,J)
+        ELSE
+            D(I,J)=0
+        END IF
+        IF (I.GT.J) THEN
+            R(I,J) = -A(I,J)
+        ELSE
+            R(I,J) = 0
+        END IF
+        IF (I.LT.J) THEN
+            C(I,J) = -A(I,J)
+        ELSE
+            C(I,J) = 0
+        END IF
+    END DO
+END DO
+
+! Calcolo matrice M = D^(-1)*(R+C)
+DO I=1,n
+    DO J=1,n 
+        M(I,J) = (R(I,J) + C(I,J)) / D(I,I)
+    END DO
+END DO
+
+! iterazioni da x_0=(0,0,0)T con Jacobi: XN = D^¹*(B - (R+C)*X)
+ITER=0 
+ITERMAX=2
+DO K=1,ITERMAX    
+    ERR=0
+    DO I=1,n 
+        NUM = B(I)
+        DO J=1,n 
+            NUM = NUM - (R(I,J) + C(I,J)) * X(J)
+        END DO
+        XN(I) = NUM / D(I,I)
+        IF (ABS(XN(I)-X(I)).GT.ERR) THEN 
+            ERR=ABS(XN(I)-X(I))
+        END IF 
+    END DO
+    IF (ERR.LT.TOL) THEN 
+        ITER=K
+        EXIT
+    END IF 
+    DO I=1,n  
+        X(I)=XN(I)
+    END DO
+END DO
+PRINT*, 'ITERATE COL METODO DI JACOBI:'
+DO I=1,ITERMAX   
+    PRINT*, X(I)
+END DO 
+!da adesso si lavora con la matrice a predominanza diangonale 
+!x_0=(0,0,0)T
+do i=1,n
+    x(i)=0 
+end do 
+k=0
+norm=1
+do while ((norm.gt.tol).and.(k.lt.100))
+k=k+1
+do i=1,n
+sum=0
+do j=1,n
+if(i.NE.j) then
+sum=sum+A(i,j)*x(j)
+end if
+end do
+x1(i)=(B(i)-sum)/A(i,i)
+sum=0
+end do
+do i=1,n
+sum=sum+(x1(i)-x(i))*(x1(i)-x(i))
+!norma 2
+x(i)=x1(i)
+end do
+norm=sqrt(sum)
+end do
+
+
+print*,'Le solizuoni con x_0=(0,0,0)T sono :'
+
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+
+
+print*,'Il numero di iterate:',k
+
+!x_0=(1,1,1)T
+do i=1,n
+    x(i)=1
+end do 
+k=0
+norm=1
+do while ((norm.gt.tol).and.(k.lt.100))
+k=k+1
+do i=1,n
+sum=0
+do j=1,n
+if(i.NE.j) then
+sum=sum+A(i,j)*x(j)
+end if
+end do
+x1(i)=(B(i)-sum)/A(i,i)
+sum=0
+end do
+do i=1,n
+sum=sum+(x1(i)-x(i))*(x1(i)-x(i))
+!norma 2
+x(i)=x1(i)
+end do
+norm=sqrt(sum)
+end do
+
+
+print*,'Le soluzioni con x_0=(1,1,1)T sono :'
+
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+
+
+print*,'Il numero di iterate:',k
+
+end 
