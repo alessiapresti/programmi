@@ -1,0 +1,117 @@
+program Lagrange
+
+implicit none
+INTEGER, PARAMETER:: nn=200
+REAL,PARAMETER :: pi=3.141593
+real*8 a,b,xc(0:nn),x(0:nn),y(0:nn),xg(0:nn),yg(0:nn),h,x1(0:nn),y1(0:nn),L(0:nn),p,yg1(0:nn),err(0:nn)
+integer i,j,k,n,ng
+
+!funzione f(x)=exp(x)cos(4x)
+!derivata f'(x)=exp(x)(cos(4x)-4sin(4x))
+print*, 'Inserisci grado del polinomio'
+read(*,*) n
+ 
+a =0
+b=3 
+ng=100
+h=(b-a)/ng
+
+do i=0,ng
+xg(i)=a+i*h
+yg(i)=exp(xg(i))*cos(4.*xg(i))
+end do
+
+print*,'I nodi di Chebychev e i valori y_i sono'
+do i=0,n
+x(i)  = cos((2.*i+1)/(n+1)*(pi/2.))
+xc(i) = (a + b)*0.5 - (b - a)*x(i)*0.5
+y(i)  = exp(xc(i))*cos(4.*xc(i))
+write(*,*) xc(i), y(i)
+end do
+
+print*,'I nodi equidistanti e i valori y_i sono'
+do i=0,n
+x1(i)=a+i*(b-a)/n
+y1(i)=exp(x1(i))*cos(4.*x1(i))
+write(*,*) x1(i),y1(i)
+end do
+
+
+!interpolazione lagrange con nodi chebychev 
+do k=0,ng
+p=0
+do i=0,n
+L(i)=1
+end do
+do i=0,n
+do j=0,n
+if(i.NE.j) then
+L(i)=L(i)*(xg(k)-xc(j))/(xc(i)-xc(j))
+end if
+end do
+p=p+y(i)*L(i)
+end do
+yg1(k)=p
+end do
+
+!errore 
+do i=0,ng
+err(i)=abs(yg(i)-yg1(i))
+end do
+
+OPEN(90,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_errc6.out')
+do i=0,ng
+write(90,*)xg(i),err(i)
+end do
+close(90)
+
+
+OPEN(91,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_funzione6.out')
+do i=0,ng
+write(91,*)xg(i),yg(i)
+end do
+close(91)
+
+OPEN(92,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_lagc6.out')
+do i=0,ng
+write(92,*)xg(i),yg1(i)
+end do
+close(92)
+
+
+!interpolazione lagrange con nodi chebychev 
+do k=0,ng
+p=0
+do i=0,n
+L(i)=1
+end do
+do i=0,n
+do j=0,n
+if(i.NE.j) then
+L(i)=L(i)*(xg(k)-x1(j))/(x1(i)-x1(j))
+end if
+end do
+p=p+y1(i)*L(i)
+end do
+yg1(k)=p
+end do
+
+!errore 
+do i=0,ng
+err(i)=abs(yg(i)-yg1(i))
+end do
+
+
+OPEN(94,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_erre6.out')
+do i=0,ng
+write(94,*)xg(i),err(i)
+end do
+close(94)
+
+OPEN(93,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_lage6.out')
+do i=0,ng
+write(93,*)xg(i),yg1(i)
+end do
+close(93)
+
+end
