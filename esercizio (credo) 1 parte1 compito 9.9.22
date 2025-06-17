@@ -1,0 +1,278 @@
+program esercizio 
+  implicit none
+  integer, parameter :: n = 3
+  real :: A(n,n), B(n), temp(n), tempB, NUM, RAGGIO 
+  real :: M(n,n), D(n,n), R(n,n), C(n,n), XN(n)
+  real :: DL(n,n), L(n,n), U(n,n) 
+  integer :: i, j, k, maxriga, somma, ITER, ITERMAX, ERR 
+
+REAL, PARAMETER:: tol=0.00001
+real*8 x(n), x1(n),sum,norm, w 
+ITERMAX=100 
+
+    A(1,:)=(/2.0, 2.2, 1.0 /)
+    A(2,:)=(/1.0, 1.0, 3.5 /)
+    A(3,:)=(/2.8, 2.0, 1.0 /)
+  B = [1.0, 1.0, 1.0]
+ 
+  print*, 'Matrice A' 
+  do i = 1, n
+     print*, A(i,:)
+  end do
+   
+  print*, 'Vettore B' 
+  do i = 1, n
+     print*, B(i)
+  end do
+
+
+
+  ! Scambio righe per tentare predominanza
+  do i = 1, n
+     do j = i, n
+        somma = 0
+        do k = 1, n
+           if (k.ne.i) somma = somma + abs(A(j,k))
+        end do
+        if (abs(A(j,i)).ge.somma) then
+           temp = A(i,:)
+           A(i,:) = A(j,:)
+           A(j,:) = temp
+
+           tempB = B(i)
+           B(i) = B(j)
+           B(j) = tempB
+           exit
+        end if
+     end do
+  end do
+
+  ! Verifica predominanza
+  do i = 1, n
+     somma = 0
+     do j = 1, n
+        if (i.ne.j) then 
+            somma = somma + abs(A(i,j))  
+        end if 
+     end do
+   end do 
+      
+  print*, 'Matrice a predominanza diagonale:'
+  do i = 1, n
+     print*, A(i,:)
+  end do
+ 
+print*, 'Jacobi:'
+do i=1,n
+    x(i)=0 
+end do 
+k=0
+norm=1
+do while ((norm.gt.tol).and.(k.lt.100))
+k=k+1
+do i=1,n
+sum=0
+do j=1,n
+if(i.NE.j) then
+sum=sum+A(i,j)*x(j)
+end if
+end do
+x1(i)=(B(i)-sum)/A(i,i)
+sum=0
+end do
+do i=1,n
+sum=sum+(x1(i)-x(i))*(x1(i)-x(i))
+!norma 2
+x(i)=x1(i)
+end do
+norm=sqrt(sum)
+end do
+
+print*,'Soluzioni:'
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+
+
+print*,'Numero di iterate:',k
+
+print*, 'Gauss Seidel:'
+do i=1,n
+    x(i)=0 
+end do 
+norm=1
+k=0
+do while ((norm.gt.tol).AND.(k.lt.100))
+k=k+1
+do i=1,n
+sum=0
+x1(i)=x(i)
+do j=1,n
+if(i.NE.j) then
+sum=sum+a(i,j)*x(j)
+end if
+end do
+x(i)=(b(i)-sum)/a(i,i)
+end do
+sum=0
+do i=1,n
+sum=sum+(x1(i)-x(i))*(x1(i)-x(i))
+end do
+norm=sqrt(sum)
+end do
+
+print*,'Soluzioni:'
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+
+
+print*,'Numero di iterate:',k
+
+
+print*, 'SOR:'
+do i=1,n
+    x(i)=0 
+end do 
+norm=1
+k=0
+do while ((norm.gt.tol).AND.(k.le.100))
+k=k+1
+do i=1,n
+sum=0
+x1(i)=x(i)
+do j=1,n
+if(i.NE.j) then
+sum=sum+a(i,j)*x(j)
+end if
+end do
+x(i)=(1-w)*x(i)+w*(b(i)-sum)/a(i,i)
+end do
+sum=0
+do i=1,n
+sum=sum+(x1(i)-x(i))*(x1(i)-x(i))
+end do
+norm=sqrt(sum)
+end do
+
+
+print*,'Soluzioni:'
+do i=1,n
+print*,'x(',i,')=',x(i)
+end do
+
+
+print*,'Numero di iterate:',k
+
+
+!1) 
+!raggio spettrale della matrice di permutazione di Jacobi 
+!raggio spettrale della matrice di permutazione di Gauss Seidel  
+
+!Jacobi 
+! Costruzione di D, R, C
+DO I=1,N
+    DO J=1,N
+        IF (I.EQ.J) THEN
+            D(I,J) = A(I,J)
+        ELSE
+            D(I,J) = 0.0
+        END IF
+        IF (I.GT.J) THEN
+            R(I,J) = -A(I,J)
+        ELSE
+            R(I,J) = 0.0
+        END IF
+        IF (I.LT.J) THEN
+            C(I,J) = -A(I,J)
+        ELSE
+            C(I,J) = 0.0
+        END IF
+    END DO
+END DO
+
+! Calcolo M = (D - R)^(-1) * C
+DO I=1,N
+    DO J=1,N
+        M(I,J) = C(I,J) / (D(I,I) - R(I,I))
+    END DO
+END DO
+
+DO I = 1, N
+   DO J = 1, N
+      IF (I.EQ.J) THEN
+          M(I, J) = 0.0
+      ELSE
+          M(I, J) = -A(I, J) / A(I, I)
+      END IF
+   END DO
+END DO
+RAGGIO = 0.0
+DO I = 1, N
+    SOMMA = 0.0
+    DO J = 1, N
+        IF (I.NE.J) THEN
+            SOMMA = SOMMA + ABS(A(I, J) / A(I, I))
+        END IF
+    END DO
+    IF (SOMMA .GT. RAGGIO) THEN
+        RAGGIO = SOMMA
+    END IF
+END DO
+
+PRINT *, 'Raggio spettrale Jacobi (stima, norma infinita):', RAGGIO
+
+!Gauss Seidel 
+! Costruzione matrici D, L, U
+DO I = 1, N
+    DO J = 1, N
+        IF (I.EQ.J) THEN
+            D(I,J) = A(I,J)
+            L(I,J) = 0.0
+            U(I,J) = 0.0
+        ELSE IF (I.GT.J) THEN
+            D(I,J) = 0.0
+            L(I,J) = -A(I,J)
+            U(I,J) = 0.0
+        ELSE
+            D(I,J) = 0.0
+            L(I,J) = 0.0
+            U(I,J) = -A(I,J)
+        END IF
+    END DO
+END DO
+
+! Calcola (D - L)
+DO I = 1, N
+    DO J = 1, N
+        DL(I,J) = D(I,J) - L(I,J)
+    END DO
+END DO
+
+! Ora risolvi (D - L) * M = U per ogni colonna di M
+DO J = 1, N
+    ! Risoluzione sistema triangolare inferiore per M(:,J)
+    DO I = 1, N
+        SUM = U(I,J)
+        DO K = 1, I-1
+            SUM = SUM - DL(I,K)*M(K,J)
+        END DO
+        M(I,J) = SUM / DL(I,I)
+    END DO
+END DO
+
+! Calcolo raggio spettrale stimato (norma infinito)
+RAGGIO = 0.0
+DO I = 1, N
+    SOMMA = 0.0
+    DO J = 1, N
+        SOMMA = SOMMA + ABS(M(I,J))
+    END DO
+    IF (SOMMA.GT.RAGGIO) THEN
+        RAGGIO = SOMMA
+    END IF
+END DO
+
+PRINT *, 'Raggio spettrale Gauss Seidel (stima, norma infinita):', RAGGIO
+
+end program  
