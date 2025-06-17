@@ -1,0 +1,46 @@
+ program formula_dei_trapezi
+ real,parameter :: pi=3.141593
+   real*8 x(0:100),y(0:100)
+   real*8 a,b,h, I_esatto
+   integer n
+   integer i,k
+   real,dimension(0:100) :: integral,e, C 
+   
+   a=0
+   b=1
+   I_esatto=1/3 !integrale di x**2 da 0 a 1 
+   
+   open(1,file='esame_3.txt')
+   
+   do k=2,4
+   
+       n=k-1 
+   
+	   h=(b-a)/n
+	   
+	   do i=0,n
+		  x(i)=a+i*h
+		  y(i)=x(i)**2
+	   end do
+	   
+	   integral(k)=0
+	   do i=0,n-1
+		  integral(k)=integral(k)+h*(y(i)+y(i+1))/2
+	   end do
+	   
+	   e(k)=abs(I_esatto-integral(k))
+	   C(k)=e(k)/(h*h)
+	   
+	   print*, 'n=',n, 'h=', h 
+	   print*, 'integrale =', integral(k)
+	   print*, 'errore=', e(k)
+	   print*, 'C=', C(k)
+	   
+	   write(1,*) n,integral(k),e(k), C(k)
+	   
+   end do
+   
+   
+   close(1)
+
+end program formula_dei_trapezi
