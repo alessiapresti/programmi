@@ -1,0 +1,48 @@
+clear all
+clc 
+A = [2, 2.2, 1;1, 1, 3.5;2.8, 2, 1 ];
+f = [1; 1; 1];
+xin = [0; 0; 0];
+nmax = 1000000;
+toll = 1e-5;
+ 
+
+D = diag(A);
+L = tril(A,-1);
+U = tril(A,1);
+
+% Definisci gli intervalli di ricerca per w
+omega_vals = 0.01:0.01:1.99;
+rho_vals = zeros(size(omega_vals));
+
+
+
+% Loop per trovare raggio spettrale per ogni w
+for i = 1:length(omega_vals)
+    omega = omega_vals(i);
+    M_sor = (diag(D) - omega * L) \((1 - omega) * diag(D) + omega * U);
+    rho_vals(i) = max(abs(eig(M_sor)));
+    % se voglio stampati gli w fprintf('w: %f\n', omega);
+    % se voglio stampati i raggi fprintf('Raggio spettrale della matrice di iterazione SOR: %f\n', rho_vals(i)); 
+end
+
+% w ottimale 
+% Trova il minimo rho e l'indice corrispettente
+[rho_min, idx_min] = min(rho_vals);
+
+% Stampa risultati
+fprintf('w ottimale = %.4f, con raggio spettrale = %.6f\n', omega_vals(idx_min), rho_min);
+
+
+
+figure;
+plot(omega_vals, rho_vals, 'LineWidth', 2);
+xlabel('\Omega'); ylabel('Raggio Spettrale'); 
+title('Raggio Spettrale SOR in funzione di w'); 
+grid on;
+
+
+hold on;
+plot(omega_vals(idx_min), rho_min, 'ro', 'MarkerFaceColor', 'red'); 
+text(omega_vals(idx_min)+0.05, rho_min, ['Minimo: \rho = ' num2str(rho_min, '%.5f')], 'color', 'red'); 
+hold off;
