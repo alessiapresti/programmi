@@ -1,0 +1,68 @@
+clear all
+clc
+
+A = [5 0 1; 1 0 3; 1 4 1];
+n = size(A,1);
+disp(A);
+
+P = eye(n);        % matrice identità 
+
+for k = 1:n-1
+    % Massimo elemento sotto la diagonale in colonna k
+    [~, r] = max(abs(A(k:n,k)));
+    r = r + k - 1; % indice riga reale
+    
+    if r ~= k
+        % Scambia le righe k e r 
+        temp = A(k,:);
+        A(k,:) = A(r,:);
+        A(r,:) = temp;
+        
+        % Scambia le righe anche in P
+        temp = P(k,:);
+        P(k,:) = P(r,:);
+        P(r,:) = temp;
+    end
+end
+
+disp(P);
+disp('Matrice permutata A (P*A):');
+disp(A);
+
+L = eye(n);
+U = A;
+
+for k = 1:n-1
+    for i = k+1:n
+        L(i,k) = U(i,k) / U(k,k);
+        U(i,:) = U(i,:) - L(i,k) * U(k,:);
+    end
+end
+
+% Mostra i risultati
+disp('Matrice L:');
+disp(L);
+disp('Matrice U:');
+disp(U);
+
+
+
+
+clear all
+clc
+
+A = [5 0 2; 1 0 3; 1 4 1];
+
+% Trova P tale che PA può essere fattorizzata
+[P, L, U] = lu(A);  % P è la matrice di permutazione
+
+disp('Matrice A:');
+disp(A);
+
+disp('Matrice permutata P*A:');
+disp(P*A);
+
+
+
+disp('Verifica: P*A = L*U');
+disp(norm(P*A - L*U));  % deve essere vicino a zero
