@@ -1,0 +1,64 @@
+ program formula_dei_trapezi
+ real,parameter :: pi=3.141593
+   real*8 x(0:100),y(0:100)
+   real*8 a,b,h, I_esatto
+   integer n
+   integer i,k
+   real,dimension(0:100) :: integral,e, C, e2, integral2, rapp 
+   
+   a=0
+   b=1
+   I_esatto=2/3 !integrale di x**0.5 da 0 a 1 
+   
+   open(1,file='es3grado2.txt')
+   
+k=2
+n=k-1 
+   
+	   h=(b-a)/n
+	   
+	   do i=0,n
+		  x(i)=a+i*h
+		  y(i)=x(i)**0.5 
+	   end do
+	   
+	   integral(k)=0
+	   do i=0,n-1
+		  integral(k)=integral(k)+h*(y(i)+y(i+1))/2
+	   end do
+	   
+	   e(k)=abs((2/3)-integral(k))
+	   C(k)=e(k)/(h*h)
+	   
+	   
+	   print*, 'n=',n, 'h=', h 
+	   print*, 'integrale =', integral(k)
+	   print*, 'errore=', e(k)
+	   print*, 'C=', C(k)
+	   
+	   write(1,*) k,e(k) 
+	   
+
+   
+   close(1)
+   
+!punto 2 
+   open(1,file='es3parte2.out')
+
+h=(b-a)/(2*n)
+do i=0,2*n
+		  x(i)=a+i*h
+		  y(i)=x(i)**0.5 
+	   end do
+integral2(k)=0
+do i=0,2*n-1
+  integral2(k)=integral2(k)+h*(y(i)+y(i+1))/2
+end do
+e2(k)=abs((2/3)-integral2(k))
+
+rapp(k)=e(k)/e2(k)
+print*, 'rapporto', rapp 
+	   write(1,*) k,rapp  
+   close(1)
+
+end program formula_dei_trapezi
