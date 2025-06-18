@@ -1,0 +1,81 @@
+PROGRAM METODO_GAUSS
+IMPLICIT NONE
+INTEGER, PARAMETER:: N=3
+REAL A(N,N), L(N,N),x(N), U(N,N)
+INTEGER I, J, K, V, IMAX
+
+
+    A(1,:)=(/5.0, 0.0, 1.0 /)
+    A(2,:)=(/1.0, 0.0, 3.0 /)
+    A(3,:)=(/1.0, 4.0, 1.0 /)
+    
+print*, 'Matrice A' 
+  do i = 1, N 
+     print*, A(i,:)
+  end do
+
+DO K=1,N-1
+DO I=K+1, N
+IF(A(K,K).EQ.0) THEN
+IMAX=K
+DO V=1,N
+IF(A(V,K).GE.A(IMAX,K)) THEN
+IMAX=V
+END IF
+END DO
+DO V=1,N
+X(V)=A(K,V)
+A(K,V)=A(IMAX,V)
+A(IMAX,V)=X(V)
+END DO
+END IF
+            
+
+A(I,K)=A(I,K)/A(K,K)
+!Y(I)=Y(I)-Y(K)*A(I,K)
+DO J=K+1, N
+A(I,J)=A(I,J)-A(I,K)*A(K,J)
+END DO
+END DO
+END DO
+DO I=1, N
+DO J=1,N
+IF(I.GT.J) THEN
+L(I,J)=A(I,J)
+A(I,J)=0
+END IF
+END DO
+END DO
+DO I=1, N
+L(I,I)=1
+END DO
+
+!X(N)=Y(N)/A(N,N)
+!DO I=N-1, 1, -1
+!SOMMA=0  X(I)=y(I)
+!DO J=I+1,N
+!X(I)=X(I)-A(I,J)*X(J)
+!END DO
+!X(I)=X(I)/A(I,I)
+!END DO
+     
+PRINT*,'LA MATRICE TRIANGOLARE U SARA'': '
+DO I=1, N
+PRINT*,(A(I,J), J=1,N)
+END DO
+PRINT*,'LA MATRICE TRIANGOLARE L SARA'': '
+DO I=1, N
+PRINT*,(L(I,J), J=1,N)
+END DO
+
+!PRINT*,'LA NUOVA MATRICE DEI TERMINI NOTI SARA'': '
+!DO I=1, N
+!PRINT*, Y(I)
+!END DO
+
+!PRINT*,'LE SOLUZIONI SONO: '
+!DO I=1, N
+!PRINT*, X(I)
+!END DO
+
+END
