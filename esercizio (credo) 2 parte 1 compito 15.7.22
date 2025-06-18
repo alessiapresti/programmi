@@ -1,0 +1,90 @@
+program Newton
+
+implicit none
+INTEGER, PARAMETER:: nn=200
+REAL,PARAMETER :: pi=3.141593
+real*8 a,b,xc(0:nn),x(0:nn),y(0:nn),xg(0:nn),yg(0:nn),h,x1(0:nn),y1(0:nn),yg1(0:nn),f(0:nn),p
+integer i,j,k,n,ng
+
+n=3 
+ 
+a =1
+b=4
+ng=100
+h=(b-a)/ng
+
+do i=0,ng
+xg(i)=a+i*h
+yg(i)=log(xg(i))
+end do
+
+
+print*,'I nodi equidistanti e i valori y_i sono'
+do i=0,n
+x1(i)=a+i*(b-a)/n
+y1(i)=log(x1(i))
+write(*,*) x1(i),y1(i)
+end do
+
+do i=0,n
+f(i)=y(i)
+end do
+
+do i=0,n
+do j=i+1,n
+f(j)=(f(j)-f(i))/(xc(j)-xc(i))
+end do
+end do
+
+do k=0,ng
+yg1(k)=f(0)
+do i=1,n
+p=f(i)
+do j=0,i-1
+p=p*(xg(k)-xc(j))
+end do
+yg1(k)=yg1(k)+p
+end do
+end do
+
+
+OPEN(91,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_esatti_g3.out')
+do i=0,ng
+write(91,*)xg(i),yg(i)
+end do
+close(91)
+
+OPEN(92,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_equid_g3.out')
+do i=0,ng
+write(92,*)x1(i),y1(i)
+end do
+close(92)
+
+do i=0,n
+f(i)=y1(i)
+end do
+
+do i=0,n
+do j=i+1,n
+f(j)=(f(j)-f(i))/(x1(j)-x1(i))
+end do
+end do
+
+do k=0,ng
+yg1(k)=f(0)
+do i=1,n
+p=f(i)
+do j=0,i-1
+p=p*(xg(k)-x1(j))
+end do
+yg1(k)=yg1(k)+p
+end do
+end do
+
+OPEN(93,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='dati_newton_g3.out')
+do i=0,ng
+write(93,*)xg(i),yg1(i)
+end do
+close(93)
+
+end
