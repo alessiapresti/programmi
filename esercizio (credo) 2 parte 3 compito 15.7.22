@@ -1,0 +1,26 @@
+clear all
+clf
+
+figure(1)
+fname = ['errore_newton_g3.out'];
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+x  = data(1,:);
+y = data(2,:);
+plot(x,y,'-r','Linewidth',2);
+hold on;
+
+fname = ['errore_newton_g6.out'];
+fid = fopen(fname);
+data = fscanf(fid,'%g %g',[2,inf]);
+status = fclose(fid);
+x  = data(1,:);
+y = data(2,:);
+plot(x,y,'-g','Linewidth',2);
+hold on; 
+
+title('Errori')
+xlabel('x');ylabel('y')
+
+grid
