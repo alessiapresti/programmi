@@ -1,0 +1,58 @@
+ real,parameter :: pi=3.141593
+   real*8 x(100),y(100)
+   real*8 a,b,h
+   integer n
+   integer i,k
+   real,dimension(0:100) :: integral,integral2,e,e2, rapp 
+   
+   a=0
+   b=pi 
+   
+!k=1,2,4,8,16 
+!integrale esatto [-cos(x)](0,pi)=-cos(pi)+cos(0)=1+1=2 
+   
+   open(1,file='esercizio__pt1_16.out')
+   
+   k=16 
+   
+       n=k
+   
+	   h=(b-a)/n
+	   
+	   do i=0,n
+		  x(i)=a+i*h
+		  y(i)=sin(x(i))
+	   end do
+	   
+	   integral(k)=0
+	   do i=0,n-1
+		  integral(k)=integral(k)+h*(y(i)+y(i+1))/2
+	   end do
+	   
+	   e(k)=abs(2-integral(k))
+	   
+	   write(1,*) n,integral(k),e(k)
+	   
+
+   close(1)
+   
+!punto 2 (n=16 no)
+   open(1,file='esercizio_pt2_8.out')
+
+h=(b-a)/(2*n)
+do i=0,2*n
+		  x(i)=a+i*h
+		  y(i)=sin(x(i))
+	   end do
+integral2(k)=0
+do i=0,2*n-1
+  integral2(k)=integral2(k)+h*(y(i)+y(i+1))/2
+end do
+e2(k)=abs(2-integral2(k))
+
+rapp(k)=e(k)/e2(k)
+	   write(1,*) k,rapp  
+   close(1)
+
+
+end program 
