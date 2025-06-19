@@ -1,0 +1,95 @@
+program jacobi
+  implicit none
+  integer, parameter :: n = 3
+  real :: A(n,n), B(n), temp(n), tempB, x(n), x1(n)
+  real :: sum, norm
+  real :: xesatt(n), err_vec(n), abs_error, rel_error
+  real :: error_history(100), rel_error_history(100)
+  integer :: i, j, k, itermax, iter
+  logical :: converged
+  character(len=100) :: filename
+
+  REAL, PARAMETER:: tol=0.00001
+  itermax = 100
+
+  ! Inizializzazione A e B
+  A(1,:) = (/ 20.0, 2.0, -1.0 /)
+  A(2,:) = (/ 2.0, 13.0, -2.0 /)
+  A(3,:) = (/ 1.0, 1.0, 1.0 /)
+  B = (/ 25.0, 30.0, 2.0 /)
+
+  print*, 'Matrice A' 
+  do i = 1, n
+     print*, A(i,:)
+  end do
+   
+  print*, 'Vettore B' 
+  do i = 1, n
+     print*, B(i)
+  end do
+  ! Soluzione esatta 
+  xesatt = (/ 1.0, 2.0, -1.0 /)
+  print*, 'soluzione esatta:',xesatt 
+
+  ! Inizializza soluzione iniziale x = 0
+  x = 0.0
+  iter = 0
+  norm = 1.0
+
+  do while (norm.gt.tol .and. iter.lt.itermax)
+     iter = iter + 1
+     do i = 1, n
+        sum = 0.0
+        do j = 1, n
+           if (i.ne.j) then
+              sum = sum + A(i,j) * x(j)
+           end if
+        end do
+        x1(i) = (B(i) - sum) / A(i,i)
+     end do
+
+     ! Calcola norma 2 della differenza x1 - x
+     norm = 0.0
+     do i = 1, n
+        norm = norm + (x1(i) - x(i))**2
+     end do
+     norm = sqrt(norm)
+
+     ! Calcola errore rispetto a soluzione esatta
+     abs_error = 0.0
+     rel_error = 0.0
+     do i = 1, n
+        err_vec(i) = x1(i) - xesatt(i)
+        abs_error = abs_error + err_vec(i)**2
+        rel_error = rel_error + (xesatt(i))**2
+     end do
+     error_history(iter) = sqrt(abs_error)
+     rel_error_history(iter) = sqrt(abs_error / rel_error)
+
+     x = x1
+  end do
+
+  ! Stampa risultati
+  print*, "Soluzione ottenuta dopo", iter, "iterazioni:"
+  do i = 1, n
+     print*, "x(", i, ") =", x(i)
+  end do
+  
+  print*, "Errore:"
+  do k = 1, iter
+     print*, "eps(", k, ") =", error_history(k)
+  end do
+  
+   print*, "Errore relativo:"
+   do k = 1, iter 
+     print*, "e(", k, ") =", rel_error_history(k)
+   end do
+
+  
+OPEN(90,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='jacobi.out')
+do k=1,iter 
+   write(90,*) k, error_history(k), rel_error_history(k)
+end do
+close(90)
+
+end program 
