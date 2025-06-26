@@ -1,0 +1,283 @@
+Ecco un commento sintetico ai risultati attesi dei tre esercizi:
+
+---
+
+*Esercizio 1 – Metodo di Jacobi*
+
+1. *Permutazione delle righe*: Per applicare il metodo di Jacobi è necessario che la matrice sia a *diagonale dominante*. Dopo una permutazione delle righe, ad esempio portando la seconda equazione al primo posto, si può ottenere una forma adatta.  
+   Es. nuovo ordine:  
+   - 3x₁ + 2x₃ = 5  
+   - x₁ + 4x₂ + 2x₃ = 2  
+   - 2x₁ + 2x₂ + 4x₃ = 1  
+
+2. *Iterazioni manuali*: Con x^(0) = (0,0,0), si calcolano x^(1) e x^(2) con le formule del metodo di Jacobi. Le differenze tra le componenti successive indicano se si sta avvicinando alla soluzione.
+
+3. *Confronto con codice Fortran*: Il codice conferma i valori delle iterate e restituisce anche quante iterazioni sono necessarie per soddisfare il *tolleranza tol = 10⁻⁵*. Se la convergenza è lenta, si vedrà un numero alto di iterazioni.
+
+4. *Influenza del punto iniziale*: Usando x^(0) = (1,1,1) si ottiene un numero di iterazioni *diverso*, ma *la soluzione finale resta invariata* (se converge). Questo evidenzia l'importanza della scelta iniziale nella velocità di convergenza.
+
+---
+
+*Esercizio 2 – Interpolazione*
+
+1. *Interpolazione con Lagrange e spline cubica*:- I *nodi equidistanti* possono causare oscillazioni ai bordi (fenomeno di Runge) per n grandi.
+   - I *nodi di Chebyshev* migliorano la stabilità, riducendo l’errore.
+   - Le *spline cubiche* danno un'approssimazione più regolare e precisa su tutto l’intervallo.
+
+2. *Grafici*: Le figure mostrano che:
+   - Per n=5 l’approssimazione è accettabile.
+   - Per n=9, i polinomi equidistanti oscillano molto, mentre le spline rimangono stabili.
+
+3. *Errore massimo*: Si osserva che:
+   - I nodi di Chebyshev danno errore minore rispetto agli equidistanti.
+   - Le spline cubiche hanno un *errore costante e molto piccolo*, risultando spesso la scelta migliore.
+
+---
+
+*Esercizio 3 – Formula dei trapezi*
+
+1. *Approssimazione integrale di ∫₀¹ x² dx = 1/3 ≈ 0.3333*:
+   - Con 2, 3, 4 nodi si ottengono valori progressivamente più vicini a 1/3.
+   - L’errore En(f) = |I - In| diminuisce con *h²*, come atteso.
+
+2. *Costante C*: Si può calcolare da C ≈ En / h². I valori calcolati per C devono essere *simili* se il metodo è corretto, confermando la bontà della maggiorazione teorica.
+
+---
+
+*Conclusione generale*:L’esercizio mostra come i metodi numerici dipendano fortemente dalle condizioni iniziali, dalla scelta dei nodi e dalle proprietà della funzione. Le spline cubiche e i nodi di Chebyshev offrono in genere migliori prestazioni rispetto ai polinomi su nodi equidistanti.Ecco un commento sintetico ai risultati attesi per ciascun esercizio:
+
+---
+
+*Esercizio 1 – Jacobi, Gauss-Seidel, SOR*
+
+1. *Raggi spettrali*:
+   - Il *raggio spettrale* determina la convergenza del metodo. Deve essere *< 1*.
+   - Se *ρ(Jacobi) > ρ(Gauss-Seidel)*, allora Gauss-Seidel converge più rapidamente.
+   - Se uno dei due ha *ρ ≥ 1*, non converge.
+
+2. *SOR e parametro ω*:
+   - Il raggio spettrale della matrice di iterazione *dipende da ω*.
+   - Il *valore ottimale ω_opt* minimizza il raggio spettrale ⇒ *convergenza più veloce*.
+   - In genere, ω ∈ (1,2) accelera il metodo; si nota un minimo netto del raggio spettrale.
+
+3. *Efficienza*:
+   - Se Gauss-Seidel o SOR ha raggio spettrale più piccolo, sarà il più efficiente.
+   - Il metodo più veloce è quello che *raggiunge la tolleranza in meno iterazioni*.
+   - SOR con ω ottimale di solito *è il migliore*.
+
+---
+
+*Esercizio 2 – Interpolazione di sin(0.5x)*
+
+1. *Interpolazione su [0, 2π], n=3*:
+   - *Nodi equidistanti*: errore maggiore ai bordi.
+   - *Nodi di Chebyshev*: errore più contenuto e distribuito.
+   - Gli errori si confrontano nei grafici: *Chebyshev vince* per stabilità.
+
+2. *Interpolazione su [0, π], n=6*:
+   - Funzione più regolare e intervallo più piccolo ⇒ minore errore.- Ancora, Chebyshev fornisce *interpolazione migliore*.
+
+3. *Grafico comparativo degli errori*:
+   - Si nota che *l’errore nei nodi equidistanti cresce ai bordi* (fenomeno di Runge).
+   - *Chebyshev minimizza l’errore massimo*, rendendo l’interpolazione più affidabile.
+
+---
+
+*Esercizio 3 – Formula dei trapezi su √x*
+
+1. *Errore in scala semilog*:
+   - L’errore *decresce esponenzialmente* con n, confermando la convergenza.
+   - In scala semilog, la curva è *quasi lineare in discesa*, mostrando che l’errore è proporzionale a *1/n²*.
+
+2. *Rapporto En/E2n*:
+   - Questo rapporto tende a *circa 4* per metodi di ordine 2, come il trapezio.
+   - Dimostra la *coerenza dell’ordine di convergenza*.
+
+---
+
+*Conclusione generale*:
+- Gauss-Seidel e SOR sono più efficienti di Jacobi, soprattutto con un buon ω.
+- I nodi di Chebyshev offrono prestazioni nettamente superiori in interpolazione.
+- L’analisi dell’errore numerico conferma l’affidabilità della teoria sui metodi di quadratura e interpolazione.Ecco una sintesi del commento ai risultati per ciascun esercizio:
+
+---
+
+*Esercizio 1 – Metodo di Jacobi*
+
+1. *Errore iterativo ε(k) = ||x(k) − x(k−1)||₂*:
+   - Mostra la *convergenza dell’algoritmo*.
+   - Decresce rapidamente se la matrice è *strettamente diagonalmente dominante* (come in questo caso).
+   - Serve come *criterio di arresto* (si arresta quando ε(k) < tol).
+
+2. *Errore assoluto e(k) = ||x(k) − x*||₂*:
+   - Indica quanto siamo *vicini alla soluzione esatta*.
+   - Deve decrescere più rapidamente di ε(k) nei primi passi se x(0) è una buona approssimazione.
+
+3. *Grafico ε(k) ed e(k)*:
+   - Entrambi decrescono in modo *esponenziale* con k.
+   - In genere, *e(k)* decresce più rapidamente nelle prime iterazioni, poi i due si avvicinano.
+   - Conferma la *buona convergenza del metodo* in questo caso.
+
+---
+
+*Esercizio 2 – Interpolazione di f(x) = |cos(x)|*
+
+1. *Interpolazione con n = 4*:
+   - *Nodi equidistanti*: errore maggiore vicino agli estremi, possibile oscillazione (effetto Runge).
+   - *Nodi di Chebyshev*: distribuzione più densa agli estremi ⇒ *errore minore* e più stabile.
+   - Il grafico mostra chiaramente *errore minore con Chebyshev*, specialmente vicino a 0 e 2π.
+
+2. *Errore teorico e confronto*:
+   - Formula dell’errore:*f(x) − pₙ(x) = f⁽ⁿ⁺¹⁾(ξ)/(n+1)! * Π(x − xᵢ)* (per ξ ∈ [a, b]).
+   - Per f(x) = |cos(x)|, la derivata quinta non è definita ovunque ⇒ *stima teorica limitata*.
+   - Confronto numerico: *|f(x*) − pₙ(x*)|* dà un errore *consistente con la maggiorazione*, ma potrebbe anche essere *molto più piccolo* se il punto cade vicino a un nodo.
+
+---
+
+*Esercizio 3 – Formula dei trapezi per ∫₀^π sin(x) dx*
+
+1. *Grafico dell’errore*:
+   - L’errore *decresce con n*, seguendo *ordine O(h²)* (metodo del trapezio).
+   - In scala logaritmica, si osserva una *retta in discesa*, confermando il comportamento teorico.
+
+2. *Rapporto Eₙ / E₂ₙ*:
+   - Se l’errore è O(h²), il rapporto tende a *4*.
+   - I valori calcolati *confermano la convergenza quadratica*.
+   - Un comportamento regolare nei rapporti è segno di *implementazione corretta* e funzione regolare.
+
+---
+
+*Conclusioni complessive*:
+- Jacobi converge bene con matrice ben condizionata.
+- Interpolazione con Chebyshev è *nettamente migliore* per funzioni non analitiche o non regolari.
+- Il metodo dei trapezi mostra *convergenza prevista teoricamente*, con buona precisione già per n moderati.Ecco il commento ai risultati per i tre esercizi proposti:
+
+---
+
+*Esercizio 1 – Eliminazione di Gauss e fattorizzazione LU*
+
+1. *Eliminazione di Gauss su A*:
+   - La matrice A ha uno zero in posizione (2,2), rendendo l’eliminazione *diretta impossibile senza pivoting*.
+   - Serve quindi *permutare righe* per portare un elemento ≠ 0 in posizione pivot.
+
+2. *Codice MATLAB per permutazione*:
+   - Lo scopo è ottenere una *matrice con pivot non nulli* sulla diagonale.
+   - Un codice semplice controlla ogni colonna e *scambia righe* se il pivot è nullo.
+
+3. *Verifica con `lu(A)`*:
+   - MATLAB applica *pivoting parziale* automaticamente: restituisce L, U e P (matrice di permutazione).
+   - Se i risultati del codice e quelli di `lu` coincidono (a meno della permutazione), la fattorizzazione è corretta.
+   - *Commento*: è importante *non presumere* che A sia sempre fattorizzabile senza permutazioni.
+
+---
+
+*Esercizio 2 – Interpolazione di f(x) = ln(x)*
+
+1. *Interpolazione con grado 3 e 6*:
+   - Polinomi di Newton su nodi equidistanti funzionano *discretamente bene* per funzioni lisce come ln(x).
+   - Tuttavia, *maggiore il grado*, maggiore il rischio di *oscillazioni (Runge)*.
+
+2. *Grafico dell’errore*:
+   - Per grado 3, l’errore è contenuto, ma cresce vicino ai bordi.- Per grado 6, l’interpolazione può peggiorare agli estremi.
+   - L’errore massimo si verifica *tipicamente vicino a x = 1 o x = 4*.
+
+3. *Formula dell’errore e confronto*:
+   - Errore: *f(x) − pₙ(x) = f⁽ⁿ⁺¹⁾(ξ)/(n+1)! * Π(x − xᵢ)*
+   - f⁽ⁿ⁺¹⁾(x) per ln(x) è alternato in segno e decresce in modulo per x > 1.
+   - A x = 3.8, il confronto numerico con la maggiorazione teorica mostra che *l’errore effettivo è in genere più piccolo* di quello stimato.
+   - *Commento*: il polinomio di grado 6 può dare miglior approssimazione interna, ma è *meno stabile ai bordi* rispetto al grado 3.
+
+---
+
+*Esercizio 3 – Formula di quadratura a 3 nodi*
+
+1. *Determinare il valore di a*:
+   - Per massimizzare il grado di precisione, si impone che la formula sia *esatta per x⁰, x¹, x², x³, x⁴*, ecc.
+   - Si trova che *a = √(3/5)* massimizza il grado di precisione ⇒ *grado 5*.
+
+2. *Integrale I(f) = ∫₋¹¹ x² dx = 2/3*:
+   - Sostituendo a = √(3/5), si calcola In(f) = 2/3 ⇒ *errore nullo*.
+   - La formula è *esatta per polinomi fino al grado 2*, come ci si aspettava.
+
+3. *Commento*:
+   - La scelta ottimale di a fa sì che la formula sia *una regola di Gauss a 3 punti*, molto efficiente.- Questo esercizio mostra l’importanza della *scelta dei nodi*: con nodi opportuni, si ottiene *massima precisione con minimo sforzo computazionale*.
+
+--- 
+
+In sintesi, tutti e tre gli esercizi mettono in luce l'importanza di:
+- adattare i metodi numerici alla *struttura dei dati* (pivoting, scelta nodi),
+- confrontare *teoria e pratica* (errori teorici vs reali),
+- usare strumenti come *Matlab* per automatizzare e visualizzare efficacemente i risultati.Ecco una sintesi dei risultati attesi con un commento per ciascun esercizio:
+
+---
+
+*Esercizio 1 – Metodo di Jacobi*
+
+1. *Permutazione per garantire convergenza*:
+   - La matrice A iniziale *non è diagonalmente dominante*.
+   - Permutando le righe per portare il valore massimo in modulo di ogni colonna sulla diagonale, otteniamo una *matrice diagonalmente dominante*, condizione sufficiente per la *convergenza del metodo di Jacobi*.
+
+2. *Numero di iterazioni con criterio relativo*:
+   - Per ciascuna tolleranza (`tol = 10⁻³, …, 10⁻⁷`), si osserva che il numero di iterazioni cresce.
+   - Jacobi ha *convergenza lenta*, ma regolare se la matrice è ben condizionata.
+   - Es. (ipotetico):  
+     - tol=10⁻³: 16 iterazioni  
+     - tol=10⁻⁴: 27 iterazioni  
+     - tol=10⁻⁵: 38 iterazioni  
+     - tol=10⁻⁶: 48 iterazioni  
+     - tol=10⁻⁷: 59 iterazioni
+
+3. *Errore ||x(k) − x*|| ≤ 10⁻⁹*:
+   - L’errore assoluto richiede più iterazioni rispetto all’errore relativo.
+   - Ci si aspetta anche qui una *convergenza graduale*, ma più lenta con soglia più stringente.
+   - Es: potrebbero essere necessarie *70–80 iterazioni*.
+
+*Commento*:
+- Il metodo di Jacobi è semplice ma *non ottimale* in velocità.
+- La *permutazione iniziale* è fondamentale per garantirne la convergenza.- Confrontando l'errore relativo e assoluto, si nota come *l’errore assoluto sia più severo* come criterio.
+
+---
+
+*Esercizio 2 – Interpolazione con polinomi di Lagrange*
+
+1. *Interpolazione con n = 4, 6, 8*:
+   - Nodi equidistanti: rischio di *effetto Runge* ai bordi, l’errore cresce con n.
+   - Nodi di Chebyshev: distribuiti più densamente ai bordi, *errore ridotto*.
+   - *Grafici degli errori* mostrano oscillazioni ampie con equidistanti e più contenute con Chebyshev.
+
+2. *Maggiorazione dell’errore per n = 4*:
+   - Formula: *|f(x) − pₙ(x)| ≤ (M / (n+1)!) * |Π(x − xᵢ)|*
+   - M = massimo dell’n+1-esima derivata di f in [−π, π].
+   - Si osserva che la *maggiorazione è molto più grande* dell’errore reale, ma segue l’andamento teorico.
+
+3. *Confronto*:
+   - I risultati numerici confermano la *superiorità dei nodi di Chebyshev*, specialmente per n elevati.
+   - Le *maggiorazioni dell’errore* tendono a sovrastimare l’errore reale, ma sono utili per sicurezza.
+
+*Commento*:
+- L’interpolazione è *molto sensibile alla scelta dei nodi*.
+- I nodi di Chebyshev *limitano l’errore di interpolazione*.
+- La teoria dell’errore conferma che il comportamento è coerente con l’analisi analitica.
+
+---
+
+*Esercizio 3 – Approssimazione ai minimi quadrati*
+
+1. *Polinomio di grado 2* ai minimi quadrati:- Si risolve un sistema lineare con la matrice dei coefficienti costruita con *xᵢ, xᵢ²*, ecc.
+   - Il polinomio migliore *minimizza la somma degli errori quadratici*.
+   - Il risultato atteso è un *parabola centrata attorno a x=0*, coerente con la simmetria dei dati.
+
+2. *Grafico in MATLAB*:
+   - I punti mostrano una funzione "a due campane".
+   - Il *polinomio di grado 2* non intercetta perfettamente tutti i punti, ma *cattura l’andamento medio*.
+   - Il grafico mostra la *curva approssimante liscia* e i punti dati discreti.
+
+*Commento*:
+- Il metodo dei *minimi quadrati* è efficace anche quando la funzione non è polinomiale.
+- L’approssimazione *non coincide con i punti dati*, ma ne *segue la tendenza generale*.
+- La rappresentazione grafica è utile per *valutare visivamente la bontà dell’approssimazione*.
+
+---
+
+*Conclusione generale*:
+- Tutti e tre gli esercizi evidenziano il ruolo fondamentale della *scelta della strategia numerica*, della *precisione richiesta*, e della *visualizzazione* per comprendere l’accuratezza e l’efficienza delle soluzioni.
