@@ -1,0 +1,189 @@
+program jacobi
+  implicit none
+  integer, parameter :: n = 3
+  real :: A(n,n), B(n), temp(n), tempB, x(n), x1(n)
+  real :: sum, norm, somma
+  integer :: predominante
+  real :: xesatt(n), err_vec(n), abs_error, rel_error
+  real :: error_history(100), rel_error_history(100)
+  integer :: i, j, k, itermax, iter
+
+  REAL :: tol
+  itermax = 100
+
+  ! Inizializzazione A e B
+  A(1,:) = (/ 2.0, -10.0, 3.0 /)
+  A(2,:) = (/ 10.0, 3.0, 1.0 /)
+  A(3,:) = (/ 1.0, 2.0, 10.0 /)
+  B = (/ -5.0, 14.0, 14.0 /)
+
+  print*, 'Matrice A' 
+  do i = 1, n
+     print*, A(i,:)
+  end do
+   
+  print*, 'Vettore B' 
+  do i = 1, n
+     print*, B(i)
+  end do
+  
+    ! Scambio righe per tentare predominanza
+  do i = 1, n
+     do j = i, n
+        somma = 0
+        do k = 1, n
+           if (k /= i) somma = somma + abs(A(j,k))
+        end do
+        if (abs(A(j,i)) >= somma) then
+           temp = A(i,:)
+           A(i,:) = A(j,:)
+           A(j,:) = temp
+
+           tempB = B(i)
+           B(i) = B(j)
+           B(j) = tempB
+           exit
+        end if
+     end do
+  end do
+
+  ! Verifica predominanza
+  predominante = 1
+  do i = 1, n
+     somma = 0
+     do j = 1, n
+        if (i /= j) somma = somma + abs(A(i,j))
+     end do
+     if (abs(A(i,i)) < somma) predominante = 0
+  end do
+
+  if (predominante == 1) then
+     print*, 'Matrice a predominanza diagonale, Jacobi converge:'
+  else
+     print*, 'Predominanza diagonale non raggiunta.'
+  end if
+
+  do i = 1, n
+     print*, A(i,:)
+  end do
+
+  ! Inizializza soluzione iniziale x = 0
+  x = 0.0
+  iter = 0
+  norm = 1.0
+  tol=0.001 
+  print*, "tol=0.001"
+
+  do while (norm.gt.tol .and. iter.lt.itermax)
+     iter = iter + 1
+     do i = 1, n
+        sum = 0.0
+        do j = 1, n
+           if (i.ne.j) then
+              sum = sum + A(i,j) * x(j)
+           end if
+        end do
+        x1(i) = (B(i) - sum) / A(i,i)
+     end do
+
+     ! Calcola norma 2 della differenza (x1 - x)/x1 
+     norm = 0.0
+     do i = 1, n
+        norm = norm + ((x1(i) - x(i))**2)/(x1(i))**2 
+     end do
+     norm = sqrt(norm)
+
+     ! Calcola errore rispetto a soluzione esatta
+     abs_error = 0.0
+     rel_error = 0.0
+     do i = 1, n
+        err_vec(i) = x1(i) - xesatt(i)
+        abs_error = abs_error + err_vec(i)**2
+        rel_error = rel_error + (xesatt(i))**2
+     end do
+     error_history(iter) = sqrt(abs_error)
+     rel_error_history(iter) = sqrt(abs_error / rel_error)
+
+     x = x1
+  end do
+
+  ! Stampa risultati
+  print*, "Soluzione ottenuta dopo", iter, "iterazioni:"
+  do i = 1, n
+     print*, "x(", i, ") =", x(i)
+  end do
+  
+  print*, "Errore:"
+  do k = 1, iter
+     print*, "eps(", k, ") =", error_history(k)
+  end do
+  
+   print*, "Errore relativo:"
+   do k = 1, iter 
+     print*, "e(", k, ") =", rel_error_history(k)
+   end do
+
+
+! Inizializza soluzione iniziale x = 1
+  x = 1.0
+  iter = 0
+  norm = 1.0
+  tol=0.000000001 
+  print*, "tol=10ˆ(-9)"
+
+  do while (norm.gt.tol .and. iter.lt.itermax)
+     iter = iter + 1
+     do i = 1, n
+        sum = 0.0
+        do j = 1, n
+           if (i.ne.j) then
+              sum = sum + A(i,j) * x(j)
+           end if
+        end do
+        x1(i) = (B(i) - sum) / A(i,i)
+     end do
+
+     ! Calcola norma 2 della differenza (x1 - x)/x1 
+     norm = 0.0
+     do i = 1, n
+        norm = norm + ((x1(i) - x(i))**2)/(x1(i))**2 
+     end do
+     norm = sqrt(norm)
+
+     ! Calcola errore rispetto a soluzione esatta
+     abs_error = 0.0
+     rel_error = 0.0
+     do i = 1, n
+        err_vec(i) = x1(i) - xesatt(i)
+        abs_error = abs_error + err_vec(i)**2
+        rel_error = rel_error + (xesatt(i))**2
+     end do
+     error_history(iter) = sqrt(abs_error)
+     rel_error_history(iter) = sqrt(abs_error / rel_error)
+
+     x = x1
+  end do
+! Stampa risultati
+  print*, "Soluzione ottenuta dopo", iter, "iterazioni:"
+  do i = 1, n
+     print*, "x(", i, ") =", x(i)
+  end do
+  
+  print*, "Errore:"
+  do k = 1, iter
+     print*, "eps(", k, ") =", error_history(k)
+  end do
+  
+   print*, "Errore relativo:"
+   do k = 1, iter 
+     print*, "e(", k, ") =", rel_error_history(k)
+   end do
+
+  
+OPEN(90,STATUS='UNKNOWN',ACCESS='SEQUENTIAL',FILE='jacobi.out')
+do k=1,iter 
+   write(90,*) tol, k, error_history(k), rel_error_history(k)
+end do
+close(90)
+
+end program 
